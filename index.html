@@ -460,26 +460,41 @@ white-space: nowrap;
 .field-feature-media, .field-note-card, .field-read-link span { transition: none !important; }
 }
 @media (max-width: 900px) {
-.gather-scroll, .archive-expand-scroll { min-height:auto; }
-.gather-sticky, .archive-sticky { position:relative; min-height:auto; padding: 110px 20px 78px; }
-.gather-line span { transform:none !important; opacity:1 !important; filter:none !important; }
-.gather-support { opacity:1; transform:none; }
-.gather-ghost { position:absolute; inset: 9vh 20px auto; }
+.floating-nav { transform: translateY(-22px) scale(.96) !important; }
+body.page-ready .floating-nav { transform: translateY(0) scale(1) !important; }
+.gather-scroll { min-height: 220vh; }
+.gather-sticky { position: sticky; top: 0; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 92px 20px 68px; overflow: hidden; }
+.archive-expand-scroll { min-height: auto !important; }
+.archive-sticky { position: relative !important; min-height: auto !important; padding: 110px 20px 78px !important; overflow: visible !important; display: block !important; }
+.gather-line { font-size: clamp(30px, 8.2vw, 52px) !important; line-height: 1.25 !important; }
+.gather-ghost {
+  position: absolute !important;
+  inset: 50% 20px auto !important;
+  transform: translateY(-50%) translateY(var(--gather-ghost-y, 0px)) !important;
+  font-size: clamp(32px, 9vw, 54px) !important;
+  line-height: 0.95 !important;
+  color: rgba(255,255,255,0.085) !important;
+  text-align: center !important;
+  max-width: 100% !important;
+  width: calc(100% - 40px) !important;
+}
 .archive-word { position:absolute; top:70px; left:20px; font-size: clamp(72px, 23vw, 130px); }
-.archive-grid { width:100%; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 180px; transform:none !important; margin-top:90px; }
-.archive-tile { transform:none !important; opacity:1 !important; }
-.archive-meta { position:relative; left:auto; bottom:auto; margin-top:28px; }
-.archive-progress { display:none; }
-.story-scroll { min-height: auto; }
-.story-sticky { position: relative; min-height: auto; padding: 110px 0 70px; }
-.story-title, .story-kicker, .story-count, .story-chapters, .story-progress { position: relative; left:auto; right:auto; top:auto; bottom:auto; }
-.story-shell { display: grid; gap: 28px; }
-.story-title { font-size: clamp(54px, 18vw, 92px); max-width: 100%; }
-.story-stage { margin-left: 0; height: auto; overflow-x: auto; padding: 18px 0 48px; }
-.story-track { transform: none !important; }
-.story-card { width: 76vw; max-width: 330px; height: 470px; }
-.story-chapters { width: 100%; }
-.story-progress { margin-top: 0; }
+.archive-grid { width: 100% !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; grid-auto-rows: clamp(140px, 36vw, 240px) !important; gap: 16px !important; transform: none !important; margin-top: 50px !important; display: grid !important; }
+.archive-tile { position: relative !important; min-height: 140px !important; transform: translate3d(0, 36px, 0) !important; opacity: 0; transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+.archive-tile.in { opacity: 1 !important; transform: translate3d(0, 0, 0) !important; }
+.archive-tile::before { filter: none !important; transform: scale(1.06) !important; }
+.archive-tile::after { opacity: 0.22 !important; }
+.archive-meta { position: relative !important; left: auto !important; bottom: auto !important; margin-top: 32px !important; max-width: 100% !important; }
+.archive-progress { display: none !important; }
+.story-scroll { min-height: 300vh; }
+.story-sticky { position: sticky; top: 0; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+.story-shell { display: flex; flex-direction: column; width: 100%; height: 100svh; justify-content: space-between; padding: 90px 20px 50px; }
+.story-kicker { position: relative; top: auto; left: auto; }
+.story-title { position: relative; top: auto; left: auto; font-size: clamp(34px, 7.5vw, 48px); max-width: 100%; margin-top: 12px; line-height: 0.95; }
+.story-stage { margin-left: 0; width: 100%; height: auto; overflow: visible; display: flex; align-items: center; }
+.story-track { display: flex; gap: 20px; }
+.story-card { width: clamp(230px, 60vw, 290px); height: clamp(340px, 46vh, 420px); }
+.story-progress { position: absolute; left: 20px; right: 20px; bottom: 20px; }
 }
 @media (max-width: 640px) {
 .hero-base, .hero-reveal-layer { background-position: center bottom; }
@@ -754,7 +769,71 @@ padding: 0 18px 0 0;
 .social-link.fb:hover  { color: #1877f2; background: rgba(24,119,242,0.12); box-shadow: 0 0 22px rgba(24,119,242,0.22); }
 .social-link.yt:hover  { color: #ff0000; background: rgba(255,0,0,0.12);    box-shadow: 0 0 22px rgba(255,0,0,0.22); }
 .social-link.li:hover  { color: #0a66c2; background: rgba(10,102,194,0.12); box-shadow: 0 0 22px rgba(10,102,194,0.22); }
-@media (max-width: 640px) { .social-sidebar { display: none; } }
+@media (max-width: 640px) {
+  .social-sidebar {
+    display: flex !important;
+    position: absolute !important;
+    right: 28px !important;
+    top: 98px !important;
+    transform: none !important;
+    z-index: 90 !important;
+    padding: 10px 6px !important;
+    gap: 6px !important;
+    background: rgba(0,0,0,0.45) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5) !important;
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .social-sidebar::before,
+  .social-sidebar::after {
+    height: 12px !important;
+  }
+  .social-link {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .social-link svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+.mobile-menu-overlay {
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-menu-overlay.is-open {
+  transform: translateX(0);
+}
+@media (max-height: 700px) and (max-width: 640px) {
+  .pointer-events-none.absolute.inset-0.z-50.flex.items-end {
+    padding-top: 76px !important;
+    padding-bottom: 20px !important;
+  }
+  .flex.min-h-0.flex-col.justify-end {
+    gap: 12px !important;
+  }
+  .mt-5 {
+    margin-top: 12px !important;
+  }
+  .hero-reveal-text {
+    font-size: clamp(32px, 8.2vw, 42px) !important;
+  }
+  .hero-anim p {
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+  }
+  .pointer-events-auto.w-fit.rounded-full {
+    padding: 10px 20px !important;
+    font-size: 13px !important;
+  }
+  .social-sidebar {
+    top: 86px !important;
+  }
+}
 </style>
 <link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><!-- aura-ga4-start -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
@@ -776,7 +855,7 @@ gtag('config', 'G-2M6V79H761');
   </div>
   <div class="scroll-rail" aria-hidden="true"><span></span></div>
 
-  <nav class="floating-nav fixed left-1/2 top-5 z-[100] flex w-[calc(100%-32px)] max-w-6xl -translate-x-1/2 items-center justify-between rounded-full border border-white/15 bg-black/35 px-4 py-3 backdrop-blur-2xl sm:px-5 md:px-6" aria-label="Main navigation">
+  <nav class="floating-nav fixed left-4 right-4 top-5 z-[100] flex items-center justify-between rounded-full border border-white/15 bg-black/35 px-4 py-3 backdrop-blur-2xl md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[calc(100%-32px)] max-w-6xl sm:px-5 md:px-6" aria-label="Main navigation">
     <a href="#" class="group flex items-center gap-3 text-white" aria-label="Appex Productions home">
       <span class="flex flex-col leading-none">
         <span class="font-playfair text-2xl italic tracking-tight">Tauseef Khaliq</span>
@@ -793,10 +872,41 @@ gtag('config', 'G-2M6V79H761');
     </div>
 
     <a href="#reserve" class="hidden rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-300 hover:border-white/40 hover:bg-white/20 md:inline-flex">Contact</a>
-    <button class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-xl md:hidden" type="button" aria-label="Open menu">
+    <button id="mobileMenuBtn" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-xl md:hidden" type="button" aria-label="Open menu">
       <iconify-icon icon="solar:hamburger-menu-linear" width="26" height="26" aria-hidden="true"></iconify-icon>
     </button>
   </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenu" class="mobile-menu-overlay fixed inset-0 z-[110] flex flex-col justify-between bg-black/95 px-8 py-10 backdrop-blur-2xl md:hidden" aria-hidden="true">
+    <div class="flex items-center justify-between">
+      <span class="flex flex-col leading-none">
+        <span class="font-playfair text-2xl italic tracking-tight text-white">Tauseef Khaliq</span>
+        <span class="mt-1 text-[9px] font-semibold uppercase tracking-[0.28em] text-white/50">Appex Productions</span>
+      </span>
+      <button id="closeMenuBtn" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-xl" type="button" aria-label="Close menu">
+        <iconify-icon icon="solar:close-circle-linear" width="26" height="26" aria-hidden="true"></iconify-icon>
+      </button>
+    </div>
+    
+    <nav class="flex flex-col gap-6 text-left my-auto">
+      <a href="#" class="mobile-nav-link font-playfair text-4xl italic text-white/80 transition-colors hover:text-white" data-target="#">Home</a>
+      <a href="#scents" class="mobile-nav-link font-playfair text-4xl italic text-white/80 transition-colors hover:text-white" data-target="#scents">Work</a>
+      <a href="#field-notes" class="mobile-nav-link font-playfair text-4xl italic text-white/80 transition-colors hover:text-white" data-target="#field-notes">Projects</a>
+      <a href="#vision" class="mobile-nav-link font-playfair text-4xl italic text-white/80 transition-colors hover:text-white" data-target="#vision">About</a>
+      <a href="#faq" class="mobile-nav-link font-playfair text-4xl italic text-white/80 transition-colors hover:text-white" data-target="#faq">FAQ</a>
+    </nav>
+    
+    <div class="flex flex-col gap-6 border-t border-white/10 pt-8">
+      <a href="#reserve" class="w-full rounded-full bg-white py-4 text-center text-sm font-semibold text-black transition-all hover:bg-[#effbff]" id="mobileContactBtn">Contact</a>
+      <div class="flex justify-center gap-6 text-white/60">
+        <a href="https://www.instagram.com/tauseef.khaliq/" target="_blank" aria-label="Instagram"><iconify-icon icon="mdi:instagram" class="text-xl"></iconify-icon></a>
+        <a href="https://x.com/imtauseefkhaliq" target="_blank" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-fill" class="text-xl"></iconify-icon></a>
+        <a href="https://www.youtube.com/@TauseefKhaliq" target="_blank" aria-label="YouTube"><iconify-icon icon="mdi:youtube" class="text-xl"></iconify-icon></a>
+        <a href="https://www.linkedin.com/in/tauseef-khaliq/" target="_blank" aria-label="LinkedIn"><iconify-icon icon="mdi:linkedin" class="text-xl"></iconify-icon></a>
+      </div>
+    </div>
+  </div>
 
   <main class="min-h-screen bg-black">
     <section class="relative h-screen w-full overflow-hidden bg-black" style="height: 100dvh;" aria-label="Tauseef Khaliq — Sound Engineer and Video Editor portfolio hero">
@@ -811,10 +921,10 @@ gtag('config', 'G-2M6V79H761');
       <div class="pointer-events-none absolute inset-0 z-50 flex items-end px-5 pb-10 pt-28 sm:px-8 sm:pb-12 md:px-12 lg:pb-14">
         <div class="w-full">
           <div class="flex min-h-0 flex-col justify-end gap-5 lg:max-w-[660px]">
-            <div class="hero-anim hero-fade flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/80 drop-shadow-[0_2px_16px_rgba(0,0,0,0.85)]" style="animation-delay: .18s;"><span class="h-px w-14 bg-[#bfeeff]"></span>Appex Productions · Sound &amp; Video</div>
+            <div class="hero-anim hero-fade flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80 drop-shadow-[0_2px_16px_rgba(0,0,0,0.85)] sm:text-[11px] sm:tracking-[0.24em]" style="animation-delay: .18s;"><span class="h-px w-14 bg-[#bfeeff] hidden sm:inline-block"></span>Appex Productions · Sound &amp; Video</div>
             <h1 class="text-white leading-[0.88] drop-shadow-[0_4px_28px_rgba(0,0,0,0.85)]">
-              <span class="hero-anim hero-reveal-text block text-5xl font-medium sm:text-6xl md:text-7xl lg:text-[6.6rem]" style="letter-spacing:-.08em;animation-delay:.25s;">Crafting sound,</span>
-              <span class="hero-anim hero-reveal-text -mt-1 block font-playfair text-5xl italic font-normal sm:text-6xl md:text-7xl lg:text-[6.6rem]" style="letter-spacing:-.06em;animation-delay:.42s;">shaping vision.</span>
+              <span class="hero-anim hero-reveal-text block text-4xl font-medium sm:text-6xl md:text-7xl lg:text-[6.6rem]" style="letter-spacing:-.08em;animation-delay:.25s;">Crafting sound,</span>
+              <span class="hero-anim hero-reveal-text -mt-1 block font-playfair text-4xl italic font-normal sm:text-6xl md:text-7xl lg:text-[6.6rem]" style="letter-spacing:-.06em;animation-delay:.42s;">shaping vision.</span>
             </h1>
             <div class="hero-anim hero-fade max-w-[560px]" style="animation-delay:.68s;">
               <p class="max-w-[470px] text-sm leading-relaxed text-white drop-shadow-[0_3px_22px_rgba(0,0,0,0.95)] sm:text-base md:text-lg">Professional sound engineer and video editor. Founder of Appex Productions — where raw audio meets cinematic vision.</p>
@@ -936,17 +1046,17 @@ gtag('config', 'G-2M6V79H761');
           <div class="archive-sticky">
             <div class="archive-word" aria-hidden="true">WORK</div>
             <div class="archive-grid" aria-hidden="true">
-              <div class="archive-tile tall" data-col="0" data-row="0" style="--tile-img: url('asstes/images/1.jpg');"></div>
-              <div class="archive-tile" data-col="1" data-row="0" style="--tile-img: url('asstes/images/2.jpg');"></div>
-              <div class="archive-tile wide" data-col="2" data-row="0" style="--tile-img: url('asstes/images/3.jpg');"></div>
-              <div class="archive-tile" data-col="4" data-row="0" style="--tile-img: url('asstes/images/4.JPG');"></div>
-              <div class="archive-tile" data-col="1" data-row="1" style="--tile-img: url('asstes/images/5.jpg');"></div>
-              <div class="archive-tile tall" data-col="2" data-row="1" style="--tile-img: url('asstes/images/6.jpg');"></div>
-              <div class="archive-tile" data-col="3" data-row="1" style="--tile-img: url('asstes/images/7.jpg');"></div>
-              <div class="archive-tile" data-col="4" data-row="1" style="--tile-img: url('asstes/images/8.jpg');"></div>
-              <div class="archive-tile wide" data-col="0" data-row="2" style="--tile-img: url('asstes/images/9.jpg');"></div>
-              <div class="archive-tile" data-col="3" data-row="2" style="--tile-img: url('asstes/images/10.jpg');"></div>
-              <div class="archive-tile" data-col="4" data-row="2" style="--tile-img: url('asstes/images/11.jpg');"></div>
+              <div class="archive-tile tall reveal stagger" data-col="0" data-row="0" style="--tile-img: url('asstes/images/1.jpg');"></div>
+              <div class="archive-tile reveal stagger" data-col="1" data-row="0" style="--tile-img: url('asstes/images/2.jpg');"></div>
+              <div class="archive-tile wide reveal stagger" data-col="2" data-row="0" style="--tile-img: url('asstes/images/3.jpg');"></div>
+              <div class="archive-tile reveal stagger" data-col="4" data-row="0" style="--tile-img: url('asstes/images/4.JPG');"></div>
+              <div class="archive-tile reveal stagger" data-col="1" data-row="1" style="--tile-img: url('asstes/images/5.jpg');"></div>
+              <div class="archive-tile tall reveal stagger" data-col="2" data-row="1" style="--tile-img: url('asstes/images/6.jpg');"></div>
+              <div class="archive-tile reveal stagger" data-col="3" data-row="1" style="--tile-img: url('asstes/images/7.jpg');"></div>
+              <div class="archive-tile reveal stagger" data-col="4" data-row="1" style="--tile-img: url('asstes/images/8.jpg');"></div>
+              <div class="archive-tile wide reveal stagger" data-col="0" data-row="2" style="--tile-img: url('asstes/images/9.jpg');"></div>
+              <div class="archive-tile reveal stagger" data-col="3" data-row="2" style="--tile-img: url('asstes/images/10.jpg');"></div>
+              <div class="archive-tile reveal stagger" data-col="4" data-row="2" style="--tile-img: url('asstes/images/11.jpg');"></div>
             </div>
             <div class="archive-meta">
               <span>Project archive / Appex Productions</span>
@@ -1235,8 +1345,9 @@ gtag('config', 'G-2M6V79H761');
           const rect = storySection.getBoundingClientRect();
           const scrollable = Math.max(1, rect.height - window.innerHeight);
           const progress = clamp(-rect.top / scrollable, 0, 1);
-          const step = clamp(Math.floor(progress * 4), 0, 3);
-          const x = -progress * Math.max(0, storyTrack.scrollWidth - window.innerWidth * 0.48);
+          const step = clamp(Math.floor(progress * 5), 0, 4); // 5 videos total
+          const offsetWidth = window.innerWidth <= 900 ? window.innerWidth * 0.82 : window.innerWidth * 0.48;
+          const x = -progress * Math.max(0, storyTrack.scrollWidth - offsetWidth);
 
           root.style.setProperty("--story-progress", progress.toFixed(4));
           root.style.setProperty("--story-light-x", (44 + progress * 34).toFixed(1) + "%");
@@ -1261,10 +1372,6 @@ gtag('config', 'G-2M6V79H761');
         window.addEventListener("scroll", requestStory, { passive: true });
         window.addEventListener("resize", requestStory, { passive: true });
         updateStory();
-      } else if (storySection) {
-        storySection.querySelectorAll(".story-chapter").forEach(function (chapter, index) {
-          chapter.classList.toggle("is-active", index === 0);
-        });
       }
 
 
@@ -1288,8 +1395,9 @@ gtag('config', 'G-2M6V79H761');
           document.documentElement.style.setProperty("--gather-cursor-left", (18 + eased * 64).toFixed(2) + "%");
           document.documentElement.style.setProperty("--gather-cursor-top", (78 - eased * 58).toFixed(2) + "%");
           gatherWords.forEach(function (word, index) {
-            const x = Number(word.dataset.x || 0) * (1 - eased);
-            const y = Number(word.dataset.y || 0) * (1 - eased);
+            const factor = window.innerWidth <= 900 ? 0.45 : 1.0;
+            const x = Number(word.dataset.x || 0) * (1 - eased) * factor;
+            const y = Number(word.dataset.y || 0) * (1 - eased) * factor;
             const r = Number(word.dataset.r || 0) * (1 - eased);
             const scale = .78 + eased * .22;
             word.style.setProperty("--tx", x.toFixed(1) + "px");
@@ -1319,6 +1427,7 @@ gtag('config', 'G-2M6V79H761');
         const archiveTiles = Array.from(archiveSection.querySelectorAll(".archive-tile"));
         let archiveTicking = false;
         function updateArchive() {
+          if (window.innerWidth <= 900) return;
           const rect = archiveSection.getBoundingClientRect();
           const scrollable = Math.max(1, rect.height - window.innerHeight);
           const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
@@ -1332,13 +1441,17 @@ gtag('config', 'G-2M6V79H761');
           document.documentElement.style.setProperty("--tile-gray", (1 - eased).toFixed(3));
           document.documentElement.style.setProperty("--tile-overlay-opacity", (.65 - eased * .35).toFixed(3));
           if (archiveGrid) {
-            archiveGrid.style.setProperty("--archive-scale", (.48 + eased * .52).toFixed(3));
+            const baseScale = window.innerWidth <= 900 ? 0.38 : 0.48;
+            const targetScale = window.innerWidth <= 900 ? 0.85 : 1.0;
+            archiveGrid.style.setProperty("--archive-scale", (baseScale + eased * (targetScale - baseScale)).toFixed(3));
           }
           archiveTiles.forEach(function (tile, index) {
             const col = Number(tile.dataset.col || 0);
             const row = Number(tile.dataset.row || 0);
-            const fromX = (2 - col) * 138;
-            const fromY = (1 - row) * 124;
+            const factorX = window.innerWidth <= 900 ? 68 : 138;
+            const factorY = window.innerWidth <= 900 ? 56 : 124;
+            const fromX = (2 - col) * factorX;
+            const fromY = (1 - row) * factorY;
             const delay = Math.min(.18, index * .012);
             const local = Math.max(0, Math.min(1, (eased - delay) / (1 - delay)));
             tile.style.setProperty("--tile-x", (fromX * (1 - local)).toFixed(1) + "px");
@@ -1530,6 +1643,46 @@ gtag('config', 'G-2M6V79H761');
           });
           setActiveLink(currentSectionId);
         }, { passive: true });
+      })();
+
+      // Mobile menu toggle logic
+      (function() {
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const closeMenuBtn = document.getElementById("closeMenuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const mobileLinks = document.querySelectorAll(".mobile-nav-link, #mobileContactBtn");
+
+        if (mobileMenuBtn && closeMenuBtn && mobileMenu) {
+          mobileMenuBtn.addEventListener("click", function() {
+            mobileMenu.classList.add("is-open");
+            mobileMenu.setAttribute("aria-hidden", "false");
+          });
+
+          closeMenuBtn.addEventListener("click", function() {
+            mobileMenu.classList.remove("is-open");
+            mobileMenu.setAttribute("aria-hidden", "true");
+          });
+
+          mobileLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+              mobileMenu.classList.remove("is-open");
+              mobileMenu.setAttribute("aria-hidden", "true");
+              
+              const targetId = link.getAttribute("data-target") || link.getAttribute("href");
+              if (targetId) {
+                e.preventDefault();
+                if (targetId === "#") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  const targetElement = document.querySelector(targetId);
+                  if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: "smooth" });
+                  }
+                }
+              }
+            });
+          });
+        }
       })();
     })();
   </script>
