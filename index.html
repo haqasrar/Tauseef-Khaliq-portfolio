@@ -2211,6 +2211,16 @@ gtag('config', 'G-2M6V79H761');
           if (r.width < 40 || r.height < 14) return;
           textZones.push({ l: r.left - 8, t: r.top + sy - 8, r: r.right + 8, b: r.bottom + sy + 8 });
         });
+        /* the hero portrait counts as a zone too */
+        if (heroSection) {
+          const hr = heroSection.getBoundingClientRect();
+          textZones.push({
+            l: window.innerWidth * .38,
+            t: hr.top + sy + hr.height * .18,
+            r: window.innerWidth * .68,
+            b: hr.top + sy + hr.height
+          });
+        }
       }
       measureText();
       window.addEventListener("load", measureText);
@@ -2225,6 +2235,9 @@ gtag('config', 'G-2M6V79H761');
         [.03, .44], [.93, .16], [.62, .66], [.83, .55], [.70, .45], [.15, .25],
         [.25, .40], [.08, .05], [.78, .42], [.90, .44], [.17, .06]
       ];
+
+      /* only a curated cast appears in the hero — the rest join after it */
+      const heroShow = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 8: 1, 9: 1, 17: 1, 18: 1, 19: 1 };
 
       let heroMode = null, softScroll = window.scrollY, gS = 0, isNarrow = null;
       function smooth(v) { return v * v * (3 - 2 * v); }
@@ -2290,10 +2303,10 @@ gtag('config', 'G-2M6V79H761');
           const y = by + (py - by) * gi;
           const rot = (s.baseRot * 2 + Math.sin(t * .5 + i) * s.wob) * (1 - gi) + s.baseRot * gi;
           const scale = baseScale + (1 - baseScale) * gi;
-          const alpha = Math.max(aHero, Math.max(aBg, gi));
-          /* blur only while the sticker actually sits under text, with a soft focus pull */
+          const alpha = Math.max(aHero * (heroShow[i] ? 1 : 0), Math.max(aBg, gi));
+          /* blur only while the sticker actually sits under text or the portrait */
           let blurT = 0;
-          if (!useHero && gi < .6) {
+          if (gi < .6) {
             const dy = y + window.scrollY;
             const w = s.cw * scale, h = s.ch * scale;
             for (let z = 0; z < textZones.length; z++) {
