@@ -2116,7 +2116,7 @@ gtag('config', 'G-2M6V79H761');
       const layer = document.getElementById("tkLayer");
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const fine = window.matchMedia("(pointer: fine)").matches;
-      const live = !!layer && fine && !reducedMotion && window.innerWidth > 900;
+      const live = !!layer && fine && !reducedMotion;
       const stickers = Array.prototype.slice.call(collage.querySelectorAll(".stk"));
 
       /* bouncy pop-in for in-flow stickers (static mode + the PRODUCTION word) */
@@ -2147,8 +2147,8 @@ gtag('config', 'G-2M6V79H761');
         }, 1700);
       }
 
+      popIn(stickers);
       if (!live) {
-        popIn(stickers);
         if (!reducedMotion) flipLoop(collage);
         return;
       }
@@ -2157,7 +2157,6 @@ gtag('config', 'G-2M6V79H761');
              then gather into the collage when the user reaches it ── */
       document.body.classList.add("tk-live");
       const bigword = collage.querySelector(".tk-bigword");
-      popIn([bigword]);
       const heroSection = document.querySelector("main section");
 
       const phs = stickers.filter(function (s) { return s !== bigword; });
@@ -2174,7 +2173,10 @@ gtag('config', 'G-2M6V79H761');
           par: .22 + rand(i * 11 + 3) * .5,
           baseRot: parseFloat(ph.style.getPropertyValue("--stk-r")) || 0,
           wob: 4 + rand(i * 13 + 5) * 7,
-          dep: .35 + rand(i * 17 + 7) * .85
+          dep: .35 + rand(i * 17 + 7) * .85,
+          cw: c.offsetWidth || 100,
+          ch: c.offsetHeight || 60,
+          blur: 0
         });
       });
       flipLoop(layer);
@@ -2199,6 +2201,22 @@ gtag('config', 'G-2M6V79H761');
       window.addEventListener("resize", measureSlots, { passive: true });
       window.addEventListener("load", measureSlots);
 
+      /* text zones (document coords) — a sticker blurs only while under one */
+      let textZones = [];
+      function measureText() {
+        const sy = window.scrollY;
+        textZones = [];
+        document.querySelectorAll("main h1, main h2, main h3, main p, main li").forEach(function (el) {
+          const r = el.getBoundingClientRect();
+          if (r.width < 40 || r.height < 14) return;
+          textZones.push({ l: r.left - 8, t: r.top + sy - 8, r: r.right + 8, b: r.bottom + sy + 8 });
+        });
+      }
+      measureText();
+      window.addEventListener("load", measureText);
+      window.addEventListener("resize", measureText, { passive: true });
+      setInterval(measureText, 2500);
+
       /* curated hero slots — top band and side columns, clear of the portrait
          (center) and the headline block (lower left) */
       const heroSlots = [
@@ -2208,12 +2226,24 @@ gtag('config', 'G-2M6V79H761');
         [.25, .40], [.08, .05], [.78, .42], [.90, .44], [.17, .06]
       ];
 
-      let heroMode = null, softScroll = window.scrollY, gS = 0;
+      let heroMode = null, softScroll = window.scrollY, gS = 0, isNarrow = null;
       function smooth(v) { return v * v * (3 - 2 * v); }
       function clamp01(v) { return Math.max(0, Math.min(1, v)); }
       function frame(now) {
         const t = now * .001;
         const vw = window.innerWidth, vh = window.innerHeight;
+
+        /* below 900px fall back to the static in-flow collage */
+        const narrow = vw <= 900;
+        if (narrow !== isNarrow) {
+          isNarrow = narrow;
+          layer.style.display = narrow ? "none" : "";
+          document.body.classList.toggle("tk-live", !narrow);
+        }
+        if (narrow) {
+          requestAnimationFrame(frame);
+          return;
+        }
         softScroll += (window.scrollY - softScroll) * .12;
         softM.x += (mouse.x - softM.x) * .06;
         softM.y += (mouse.y - softM.y) * .06;
@@ -2261,6 +2291,18 @@ gtag('config', 'G-2M6V79H761');
           const rot = (s.baseRot * 2 + Math.sin(t * .5 + i) * s.wob) * (1 - gi) + s.baseRot * gi;
           const scale = baseScale + (1 - baseScale) * gi;
           const alpha = Math.max(aHero, Math.max(aBg, gi));
+          /* blur only while the sticker actually sits under text, with a soft focus pull */
+          let blurT = 0;
+          if (!useHero && gi < .6) {
+            const dy = y + window.scrollY;
+            const w = s.cw * scale, h = s.ch * scale;
+            for (let z = 0; z < textZones.length; z++) {
+              const tz = textZones[z];
+              if (x < tz.r && x + w > tz.l && dy < tz.b && dy + h > tz.t) { blurT = 1; break; }
+            }
+          }
+          s.blur += (blurT * 6.5 - s.blur) * .18;
+          c.style.filter = s.blur > .25 ? "blur(" + s.blur.toFixed(1) + "px)" : "";
           c.style.opacity = alpha.toFixed(3);
           c.style.transform = "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0) rotate(" + rot.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
         }
