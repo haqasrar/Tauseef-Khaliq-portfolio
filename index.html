@@ -99,7 +99,8 @@ setPaused(event.data.paused);
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600&display=swap');
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-html, body { min-height: 100%; margin: 0; background: #050505; }
+html { min-height: 100%; margin: 0; background: #050505; }
+body { min-height: 100%; margin: 0; background: transparent; }
 body { overflow-x: hidden; letter-spacing: -0.02em; font-family: "Inter", sans-serif; color: #fff; }
 button, a { font: inherit; }
 .font-playfair { font-family: "Playfair Display", serif !important; }
@@ -153,8 +154,9 @@ position: relative;
 background:
 radial-gradient(ellipse at 72% 4%, rgba(191,238,255,.075), transparent 34%),
 radial-gradient(ellipse at 14% 38%, rgba(216,194,255,.055), transparent 38%),
-linear-gradient(180deg, #050505 0%, #070707 42%, #030303 100%);
+linear-gradient(180deg, rgba(5,5,5,.6) 0%, rgba(7,7,7,.55) 42%, rgba(3,3,3,.62) 100%);
 }
+main { background: transparent !important; }
 .site-bg::before {
 content: "";
 position: fixed;
@@ -854,6 +856,18 @@ padding: 0 18px 0 0;
   pointer-events: none;
   opacity: 0;
 }
+/* ── liquid background — gooey blobs drifting behind the whole site ── */
+.liquid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: blur(34px) contrast(1.35) saturate(1.25);
+  opacity: .85;
+}
+@media (prefers-reduced-motion: reduce) { .liquid-bg { filter: blur(40px); opacity: .5; } }
 /* ── Toolkit sticker collage — flat, playful, bir.ch-style ── */
 .tk-collage { display: flex; flex-direction: column; align-items: center; gap: clamp(12px, 2vw, 22px); }
 .tk-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(12px, 2.2vw, 26px); }
@@ -1026,6 +1040,8 @@ gtag('config', 'G-2M6V79H761');
 <!-- aura-ga4-end -->
 </head>
 <body class="is-loading">
+  <canvas class="liquid-bg" id="liquidBg" aria-hidden="true"></canvas>
+
   <div class="load-intro" id="loadIntro" aria-hidden="true">
     <div class="load-intro-inner">
       <div class="load-kicker">Sound &amp; Vision — Portfolio</div>
@@ -1462,8 +1478,8 @@ gtag('config', 'G-2M6V79H761');
             <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/60">Whether it's a full production or a single track mix — I'm ready to bring your vision to life with Appex Productions quality.</p>
             <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"><a href="tel:+917889420003" class="w-fit rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all hover:scale-[1.03] hover:bg-[#effbff] hover:shadow-lg hover:shadow-[#bfeeff]/25 active:scale-95">Contact me now</a><a href="#scents" class="w-fit rounded-full border border-white/30 bg-transparent px-8 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all hover:border-white/55 hover:bg-white/10 active:scale-95">See my services</a></div>
             <div class="mt-8 flex flex-col items-center justify-center gap-3 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row sm:gap-8">
-              <p class="flex items-center gap-2"><iconify-icon icon="solar:letter-bold-duotone" class="text-[#bfeeff] text-lg"></iconify-icon> <a href="mailto:info@appexproductions.com" class="hover:text-white transition-colors">info@appexproductions.com</a></p>
-              <p class="flex items-center gap-2"><iconify-icon icon="solar:phone-bold-duotone" class="text-[#bfeeff] text-lg"></iconify-icon> <a href="tel:+917889420003" class="hover:text-white transition-colors">+91 7889420003</a></p>
+              <p class="flex items-center gap-2"><iconify-icon icon="solar:letter-bold-duotone" class="text-[#bfeeff] text-lg"></iconify-icon> <a href="mailto:ceo@appexproductions.com" class="hover:text-white transition-colors">ceo@appexproductions.com</a></p>
+              <p class="flex items-center gap-2"><iconify-icon icon="solar:phone-bold-duotone" class="text-[#bfeeff] text-lg"></iconify-icon> <a href="tel:+917889420003" class="hover:text-white transition-colors">Call now</a></p>
             </div>
           </div>
         </section>
@@ -1487,7 +1503,7 @@ gtag('config', 'G-2M6V79H761');
               <p class="max-w-sm text-sm leading-relaxed text-white/55">Sound engineer and video editor. Founder of Appex Productions — crafting cinematic audio and visual experiences that resonate.</p>
               <div class="grid grid-cols-2 gap-12 sm:grid-cols-3">
                 <div><p class="text-[10px] font-bold uppercase tracking-[.26em] text-white/40">Navigate</p><ul class="mt-5 space-y-3 text-sm text-white/60"><li><a href="#scents" class="hover:text-white">Services</a></li><li><a href="#field-notes" class="hover:text-white">Projects</a></li><li><a href="#vision" class="hover:text-white">About</a></li><li><a href="#faq" class="hover:text-white">FAQ</a></li></ul></div>
-                <div><p class="text-[10px] font-bold uppercase tracking-[.26em] text-white/40">Contact</p><ul class="mt-5 space-y-3 text-sm text-white/60"><li><a href="mailto:info@appexproductions.com" class="hover:text-white">info@appexproductions.com</a></li><li><a href="tel:+917889420003" class="hover:text-white">+91 7889420003</a></li><li><a href="#reserve" class="hover:text-white">Contact Page</a></li></ul></div>
+                <div><p class="text-[10px] font-bold uppercase tracking-[.26em] text-white/40">Contact</p><ul class="mt-5 space-y-3 text-sm text-white/60"><li><a href="mailto:ceo@appexproductions.com" class="hover:text-white">ceo@appexproductions.com</a></li><li><a href="tel:+917889420003" class="hover:text-white">Call now</a></li><li><a href="#reserve" class="hover:text-white">Contact Page</a></li></ul></div>
                 <div><p class="text-[10px] font-bold uppercase tracking-[.26em] text-white/40">Follow</p><ul class="mt-5 space-y-3 text-sm text-white/60"><li><a href="https://www.instagram.com/tauseef.khaliq/" class="flex items-center gap-2 hover:text-white transition-colors" target="_blank"><iconify-icon icon="mdi:instagram" class="text-base text-[#bfeeff]"></iconify-icon>Instagram</a></li><li><a href="https://x.com/imtauseefkhaliq" class="flex items-center gap-2 hover:text-white transition-colors" target="_blank"><iconify-icon icon="ri:twitter-x-fill" class="text-base text-[#bfeeff]"></iconify-icon>Twitter</a></li><li><a href="https://www.youtube.com/@TauseefKhaliq" class="flex items-center gap-2 hover:text-white transition-colors" target="_blank"><iconify-icon icon="mdi:youtube" class="text-base text-[#bfeeff]"></iconify-icon>YouTube</a></li><li><a href="https://www.linkedin.com/in/tauseef-khaliq/" class="flex items-center gap-2 hover:text-white transition-colors" target="_blank"><iconify-icon icon="mdi:linkedin" class="text-base text-[#bfeeff]"></iconify-icon>LinkedIn</a></li></ul></div>
               </div>
             </div>
@@ -2122,6 +2138,112 @@ gtag('config', 'G-2M6V79H761');
     })();
   </script>
 
+
+  <script>
+    (function () {
+      const canvas = document.getElementById("liquidBg");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const SCALE = .3; /* render small, upscale + blur for the gooey look */
+
+      const COLORS = [
+        [120, 210, 255], [150, 225, 255], [190, 160, 255],
+        [255, 120, 190], [90, 180, 240], [200, 190, 255], [110, 230, 220]
+      ];
+      const blobs = [];
+      for (let i = 0; i < 7; i++) {
+        blobs.push({
+          fx: .12 + (i * .137) % .78,
+          fy: (i * .29) % 1,
+          r: .22 + ((i * 7) % 5) * .045,
+          sx: .06 + ((i * 3) % 5) * .022,
+          sy: .05 + ((i * 5) % 4) * .026,
+          ph: i * 1.7,
+          pull: .12 + ((i * 11) % 6) * .055,
+          col: COLORS[i % COLORS.length],
+          x: 0, y: 0
+        });
+      }
+
+      const mouse = { x: -1, y: -1 }, soft = { x: -1, y: -1 };
+      window.addEventListener("pointermove", function (e) { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+      window.addEventListener("pointerleave", function () { mouse.x = -1; mouse.y = -1; }, { passive: true });
+
+      let w = 0, h = 0;
+      function resize() {
+        w = Math.max(1, Math.round(window.innerWidth * SCALE));
+        h = Math.max(1, Math.round(window.innerHeight * SCALE));
+        canvas.width = w;
+        canvas.height = h;
+      }
+      window.addEventListener("resize", resize, { passive: true });
+      resize();
+
+      function paint(t) {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.clearRect(0, 0, w, h);
+        ctx.globalCompositeOperation = "lighter";
+        const mx = soft.x < 0 ? w * .5 : soft.x * SCALE;
+        const my = soft.y < 0 ? h * .5 : soft.y * SCALE;
+        const active = soft.x >= 0 ? 1 : 0;
+
+        for (let i = 0; i < blobs.length; i++) {
+          const b = blobs[i];
+          let bx = (b.fx + Math.sin(t * b.sx + b.ph) * .17) * w;
+          let by = (b.fy + Math.cos(t * b.sy + b.ph * 1.3) * .19) * h;
+          /* the liquid leans toward the cursor, each blob at its own rate */
+          bx += (mx - bx) * b.pull * active;
+          by += (my - by) * b.pull * active;
+          b.x = bx;
+          b.y = by;
+          const rad = (b.r + Math.sin(t * .5 + b.ph) * .03) * Math.min(w, h) * 1.5;
+          const g = ctx.createRadialGradient(bx, by, 0, bx, by, rad);
+          const c = b.col;
+          g.addColorStop(0, "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",.5)");
+          g.addColorStop(.45, "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",.18)");
+          g.addColorStop(1, "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",0)");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(bx, by, rad, 0, 6.283);
+          ctx.fill();
+        }
+
+        /* a brighter droplet right under the cursor */
+        if (active) {
+          const rad = Math.min(w, h) * .34;
+          const g = ctx.createRadialGradient(mx, my, 0, mx, my, rad);
+          g.addColorStop(0, "rgba(210,240,255,.4)");
+          g.addColorStop(.4, "rgba(170,200,255,.14)");
+          g.addColorStop(1, "rgba(170,200,255,0)");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(mx, my, rad, 0, 6.283);
+          ctx.fill();
+        }
+      }
+
+      if (reducedMotion) {
+        paint(0);
+        return;
+      }
+      function frame(now) {
+        const t = now * .001;
+        if (mouse.x >= 0) {
+          if (soft.x < 0) { soft.x = mouse.x; soft.y = mouse.y; }
+          soft.x += (mouse.x - soft.x) * .045;
+          soft.y += (mouse.y - soft.y) * .045;
+        } else if (soft.x >= 0) {
+          soft.x += (window.innerWidth * .5 - soft.x) * .01;
+          soft.y += (window.innerHeight * .5 - soft.y) * .01;
+        }
+        paint(t);
+        requestAnimationFrame(frame);
+      }
+      paint(0);
+      requestAnimationFrame(frame);
+    })();
+  </script>
 
   <script>
     (function () {
